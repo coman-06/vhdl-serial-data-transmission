@@ -18,8 +18,6 @@ Two independent blocks talk to each other over a one-bit serial line, the way a 
 
 **Detector (receiver)** captures the stream into a SIPO shift register, validates the start code against a hardcoded value, computes a running XOR checksum over the payload as each 4-bit BCD word arrives, and compares it against the checksum at the end of the packet.
 
-![Generator and Detector connected by the serial data line](docs/figures/02-block-diagram.png)
-
 ### Packet format
 
 | Segment | Width | Contents |
@@ -39,8 +37,6 @@ The line idles at logic `1`. A falling edge to `0` marks the start bit.
 | `10` | **Invalid start code** | `HEAD FAIL`, all flags drop |
 | `11` | Valid header, **corrupted checksum** | `HEAD DONE` → `CSUM FAIL` |
 
-![The board displaying "HEAd FAIL" after an invalid start code](docs/figures/05-board-header-fail.jpg)
-
 *Mode `10`: the Detector rejects the corrupted start code and reports `HEAD FAIL`.*
 
 ### Interface
@@ -55,8 +51,6 @@ The line idles at logic `1`. A falling edge to `0` marks the start bit.
 ## Architecture
 
 Each block splits into a **control unit** (a finite state machine) and an **execution unit** (the datapath) — the standard FSMD separation.
-
-![Detailed logic diagram of the Generator and Detector datapaths](docs/figures/03-detailed-logic-diagram.png)
 
 Detector datapath resources:
 
